@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>the dental fear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ── SECTION 1: Light intro ── */
+  .section-intro {
+    width: 100%;
+    background: #F5F2EE;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100svh;
+    text-align: center;
+    padding: 80px 24px 60px;
+  }
+
+  .header-dot {
+    color: #8A8078;
+    font-size: 22px;
+    line-height: 1;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .header-question {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 400;
+    color: #1A1A1A;
+    letter-spacing: 0.01em;
+    line-height: 1.25;
+    max-width: 560px;
+  }
+
+  /* ── Scroll hint ── */
+  .scroll-hint {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    opacity: 0;
+    animation: fadeInHint 800ms ease 600ms forwards;
+  }
+
+  @keyframes fadeInHint {
+    to { opacity: 1; }
+  }
+
+  .scroll-hint-arrow {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid #C8C2BB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 200ms ease;
+    animation: bobArrow 2s ease-in-out 1.4s infinite;
+  }
+
+  @keyframes bobArrow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  .scroll-hint:hover .scroll-hint-arrow {
+    border-color: #8A8078;
+    animation: none;
+    transform: translateY(3px);
+  }
+
+  .scroll-hint-arrow svg {
+    width: 14px;
+    height: 14px;
+    stroke: #8A8078;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── SECTION 2: Dark cards ── */
+  .section-cards {
+    width: 100%;
+    background: #111110;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 24px 96px;
+    transition: padding 400ms ease;
+  }
+
+  .cards-label {
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #555550;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .cards-section {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card {
+    background: #1E1E1C;
+    border-radius: 14px;
+    border: 1.5px solid transparent;
+    padding: 20px 24px;
+    font-size: 17px;
+    font-weight: 400;
+    color: #C8C4BE;
+    cursor: pointer;
+    transition:
+      border-color 350ms ease,
+      background 350ms ease,
+      opacity 600ms ease,
+      transform 600ms ease,
+      max-height 500ms ease,
+      padding 400ms ease,
+      margin 400ms ease;
+    opacity: 0;
+    transform: translateY(16px);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+  }
+
+  .card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .card.selected {
+    border-color: #F5F2EE;
+    background: #2A2A28;
+    color: #F5F2EE;
+    opacity: 1;
+  }
+
+  .card.hidden {
+    opacity: 0;
+    max-height: 0 !important;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-width: 0;
+    pointer-events: none;
+  }
+
+  /* ── Inline response (dark section) ── */
+  .inline-response {
+    max-width: 480px;
+    width: 100%;
+    font-weight: 400;
+    font-size: 18px;
+    color: #E8E4DE;
+    text-align: left;
+    line-height: 1.65;
+    margin-top: 24px;
+    padding: 0 4px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 800ms ease, transform 800ms ease;
+  }
+
+  .inline-response.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── SECTION 3: Light outro ── */
+  .section-outro {
+    width: 100%;
+    background: #F5F2EE;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 72px 24px 80px;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 900ms ease, transform 900ms ease;
+    pointer-events: none;
+  }
+
+  .section-outro.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  /* ── CTA ── */
+  .cta-block {
+    max-width: 480px;
+    width: 100%;
+    font-weight: 300;
+    font-size: 17px;
+    color: #4A4540;
+    text-align: center;
+    line-height: 1.75;
+    margin-bottom: 32px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 800ms ease 200ms, transform 800ms ease 200ms;
+  }
+
+  .section-outro.visible .cta-block {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Email capture ── */
+  .email-block {
+    max-width: 480px;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 800ms ease 500ms, transform 800ms ease 500ms;
+  }
+
+  .section-outro.visible .email-block {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .email-input {
+    width: 100%;
+    border-radius: 10px;
+    background: #EDEAE5;
+    border: 1.5px solid #C8C2BB;
+    padding: 14px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #1A1A1A;
+    outline: none;
+    transition: border-color 300ms ease;
+    -webkit-appearance: none;
+  }
+
+  .email-input::placeholder {
+    color: #B0A898;
+  }
+
+  .email-input:focus {
+    border-color: #8A8078;
+  }
+
+  .email-input.highlight {
+    border-color: #4A3F35;
+  }
+
+  .email-disclaimer {
+    font-size: 13px;
+    font-weight: 300;
+    color: #8A8078;
+    margin-top: 10px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  .email-disclaimer strong {
+    font-weight: 400;
+    color: #4A3F35;
+  }
+
+  .email-hint {
+    font-size: 14px;
+    font-style: italic;
+    color: #8A8078;
+    margin-top: 8px;
+    min-height: 20px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .email-hint.visible {
+    opacity: 1;
+  }
+
+  .submit-btn {
+    width: 100%;
+    margin-top: 12px;
+    border-radius: 10px;
+    background: #1A1A1A;
+    color: #F5F2EE;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 14px;
+    cursor: pointer;
+    transition: background 200ms ease;
+  }
+
+  .submit-btn:hover {
+    background: #4A3F35;
+  }
+
+  /* ── Confirmation ── */
+  .confirmation {
+    max-width: 480px;
+    width: 100%;
+    margin-top: 0;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 700ms ease;
+    display: none;
+  }
+
+  .confirmation.visible {
+    opacity: 1;
+  }
+
+  .confirmation-line {
+    font-weight: 300;
+    font-size: 20px;
+    color: #4A3F35;
+    margin-bottom: 8px;
+  }
+
+  .confirmation-sub {
+    font-weight: 300;
+    font-size: 14px;
+    color: #B0A898;
+    font-style: italic;
+  }
+
+  /* ── Logo ── */
+  .logo-wrap {
+    margin-top: 64px;
+    text-align: center;
+  }
+
+  .logo-wrap img {
+    max-width: 100px;
+    width: 100%;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* ── Fade out ── */
+  .fade-out {
+    opacity: 0;
+    transition: opacity 300ms ease;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- SECTION 1: Intro (light) -->
+<section class="section-intro">
+  <span class="header-dot">·</span>
+  <h1 class="header-question">How's your relationship with your mouth?</h1>
+  <button class="scroll-hint" onclick="scrollToCards()" aria-label="See answer options">
+    <span class="scroll-hint-arrow">
+      <svg viewBox="0 0 14 14"><polyline points="2,4 7,10 12,4"/></svg>
+    </span>
+  </button>
+</section>
+
+<!-- SECTION 2: Cards (dark) -->
+<section class="section-cards" id="section-cards">
+  <p class="cards-label">pick the one that fits</p>
+  <div class="cards-section" id="cards-section">
+    <div class="card" data-card="Card1" onclick="selectCard(this)">Pretty good. I stay on top of it.</div>
+    <div class="card" data-card="Card2" onclick="selectCard(this)">I know I should do more, but I don't.</div>
+    <div class="card" data-card="Card3" onclick="selectCard(this)">Something feels off but I haven't done anything about it.</div>
+    <div class="card" data-card="Card4" onclick="selectCard(this)">Honestly — I try not to think about it.</div>
+  </div>
+  <div class="inline-response" id="inline-response"></div>
+</section>
+
+<!-- SECTION 3: Outro (light) -->
+<section class="section-outro" id="section-outro">
+  <div class="cta-block" id="cta-block"></div>
+
+  <div class="email-block" id="email-block">
+    <input type="email" class="email-input" id="email-input" placeholder="Your email" autocomplete="email" />
+    <p class="email-disclaimer">We will only use your email to update you on our progress.<br><strong>No spam — ever. We mean it.</strong></p>
+    <div class="email-hint" id="email-hint">Drop your email so we can reach you.</div>
+    <button class="submit-btn" id="submit-btn" onclick="submitForm()"></button>
+  </div>
+
+  <div class="confirmation" id="confirmation">
+    <p class="confirmation-line">You're on the list.</p>
+    <p class="confirmation-sub">We'll be in touch when it's ready.</p>
+  </div>
+
+  <div class="logo-wrap">
+    <img src="the_dental_fear_logo_2.png" alt="the dental fear" />
+  </div>
+</section>
+
+<script>
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyH0NmCJCUtfPfznUd_FyRQhHVwoKEO-J8NCOjd3OC8FWLZkBRcdrPm6fO6cMQ484zhig/exec';
+
+  const responses = {
+    Card1: {
+      response: "Good. You're ahead of most people.",
+      cta: "We're working on something that gives you a deeper picture of your oral health — without leaving yours. Want to see it first?",
+      btn: "Yes, show me first"
+    },
+    Card2: {
+      response: "You're in good company. Most people feel exactly the same way.",
+      cta: "We're working on something that lets you take care of your mouth from home — without leaving yours. Want to know when it's ready?",
+      btn: "Yes, tell me when it's ready"
+    },
+    Card3: {
+      response: "That feeling is more common than most people admit.",
+      cta: "We're working on something that lets you take care of your mouth from home — without leaving yours. Want to know when it's ready?",
+      btn: "Yes, tell me when it's ready"
+    },
+    Card4: {
+      response: "So do most people. 72.6% of Americans are afraid of the dentist. You're not alone in that.",
+      cta: "We're working on something that lets you take care of your mouth from home — without leaving yours. Want to know when it's ready?",
+      btn: "Yes, tell me when it's ready"
+    }
+  };
+
+  let selectedCard = null;
+  let responseTimer = null;
+  let outroTimer = null;
+
+  function scrollToCards() {
+    document.getElementById('section-cards').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Staggered card entrance on scroll into view
+  window.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          cards.forEach((card, i) => {
+            setTimeout(() => card.classList.add('visible'), 180 * i);
+          });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.15 });
+    observer.observe(document.getElementById('section-cards'));
+  });
+
+  function selectCard(el) {
+    if (selectedCard === el.dataset.card) return;
+    selectedCard = el.dataset.card;
+
+    clearTimeout(responseTimer);
+    clearTimeout(outroTimer);
+
+    // Reset
+    const inlineEl = document.getElementById('inline-response');
+    const outroEl = document.getElementById('section-outro');
+    const ctaEl = document.getElementById('cta-block');
+
+    inlineEl.classList.remove('visible');
+    outroEl.classList.remove('visible');
+
+    // Hide unselected, highlight selected
+    document.querySelectorAll('.card').forEach(c => {
+      c.classList.remove('selected', 'hidden');
+      if (c === el) {
+        c.classList.add('selected');
+      } else {
+        c.classList.add('hidden');
+      }
+    });
+
+    const data = responses[selectedCard];
+    inlineEl.textContent = data.response;
+    ctaEl.textContent = data.cta;
+    document.getElementById('submit-btn').textContent = data.btn;
+
+    // Smooth staggered reveal
+    responseTimer = setTimeout(() => {
+      inlineEl.classList.add('visible');
+    }, 600);
+
+    outroTimer = setTimeout(() => {
+      outroEl.classList.add('visible');
+      setTimeout(() => {
+        outroEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 400);
+    }, 1600);
+  }
+
+  function submitForm() {
+    if (!selectedCard) return;
+
+    const emailInput = document.getElementById('email-input');
+    const emailHint = document.getElementById('email-hint');
+    const email = emailInput.value.trim();
+
+    if (!email) {
+      emailInput.classList.add('highlight');
+      emailHint.classList.add('visible');
+      setTimeout(() => emailInput.classList.remove('highlight'), 2000);
+      return;
+    }
+
+    emailHint.classList.remove('visible');
+
+    const payload = {
+      email: email,
+      card: selectedCard,
+      timestamp: new Date().toISOString()
+    };
+
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.6';
+
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.result === 'success') {
+        showConfirmation();
+      } else {
+        showError();
+      }
+    })
+    .catch(() => {
+      showError();
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+    });
+  }
+
+  function showConfirmation() {
+    const emailEl = document.getElementById('email-block');
+    const confirmEl = document.getElementById('confirmation');
+    emailEl.classList.add('fade-out');
+    setTimeout(() => {
+      emailEl.style.display = 'none';
+      confirmEl.style.display = 'block';
+      requestAnimationFrame(() => confirmEl.classList.add('visible'));
+    }, 300);
+  }
+
+  function showError() {
+    const hint = document.getElementById('email-hint');
+    hint.textContent = 'Something went wrong. Try again in a moment.';
+    hint.classList.add('visible');
+  }
+
+  document.getElementById('email-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') submitForm();
+  });
+
+  document.getElementById('email-input').addEventListener('focus', () => {
+    document.getElementById('email-input').classList.remove('highlight');
+  });
+</script>
+</body>
+</html>
