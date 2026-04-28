@@ -12,13 +12,11 @@ export default async function handler(req, res) {
   const token = crypto.randomUUID();
   const timestamp = new Date().toISOString();
 
-  // Save to Google Sheet as pending
   await fetch(process.env.APPS_SCRIPT_URL, {
     method: 'POST',
     body: new URLSearchParams({ email, card, timestamp, token, status: 'pending' })
   });
 
-  // Send confirmation email via Resend
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -26,13 +24,13 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      from: 'the dental fear <hola@thedentalfear.com>',
+      from: 'the dental fear <hello@thedentalfear.com>',
       to: email,
-      subject: 'Confirm your email',
+      subject: 'One last step — we promise.',
       html: `
         <div style="font-family:'DM Sans',sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;background:#F5F2EE;color:#1A1A1A;">
           <p style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#8A8078;margin-bottom:24px;">the dental fear</p>
-          <p style="font-size:20px;font-weight:400;line-height:1.4;margin-bottom:16px;">One quick step.</p>
+          <p style="font-size:20px;font-weight:400;line-height:1.4;margin-bottom:16px;">One last step.</p>
           <p style="font-size:16px;font-weight:300;color:#4A4540;line-height:1.7;margin-bottom:32px;">Click the button below to confirm your email and secure your spot.</p>
           <a href="https://thedentalfear.com/api/confirm?token=${token}" style="display:inline-block;background:#1A1A1A;color:#F5F2EE;text-decoration:none;padding:14px 28px;border-radius:10px;font-size:16px;">Yes, confirm me</a>
           <p style="margin-top:32px;font-size:12px;color:#B0A898;font-style:italic;">If you didn't sign up for this, just ignore this email.</p>
