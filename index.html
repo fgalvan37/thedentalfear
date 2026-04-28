@@ -56,13 +56,11 @@
     max-width: 560px;
   }
 
-  /* ── Scroll hint ── */
   .scroll-hint {
     margin-top: 48px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
     cursor: pointer;
     background: none;
     border: none;
@@ -116,7 +114,6 @@
     flex-direction: column;
     align-items: center;
     padding: 80px 24px 96px;
-    transition: padding 400ms ease;
   }
 
   .cards-label {
@@ -184,7 +181,6 @@
     pointer-events: none;
   }
 
-  /* ── Inline response (dark section) ── */
   .inline-response {
     max-width: 480px;
     width: 100%;
@@ -225,7 +221,6 @@
     pointer-events: all;
   }
 
-  /* ── CTA ── */
   .cta-block {
     max-width: 480px;
     width: 100%;
@@ -245,7 +240,6 @@
     transform: translateY(0);
   }
 
-  /* ── Email capture ── */
   .email-block {
     max-width: 480px;
     width: 100%;
@@ -334,11 +328,9 @@
     background: #4A3F35;
   }
 
-  /* ── Confirmation ── */
   .confirmation {
     max-width: 480px;
     width: 100%;
-    margin-top: 0;
     text-align: center;
     opacity: 0;
     transition: opacity 700ms ease;
@@ -363,7 +355,6 @@
     font-style: italic;
   }
 
-  /* ── Logo ── */
   .logo-wrap {
     margin-top: 64px;
     text-align: center;
@@ -376,7 +367,6 @@
     margin: 0 auto;
   }
 
-  /* ── Fade out ── */
   .fade-out {
     opacity: 0;
     transition: opacity 300ms ease;
@@ -386,7 +376,6 @@
 </head>
 <body>
 
-<!-- SECTION 1: Intro (light) -->
 <section class="section-intro">
   <span class="header-dot">·</span>
   <h1 class="header-question">How's your relationship with your mouth?</h1>
@@ -397,7 +386,6 @@
   </button>
 </section>
 
-<!-- SECTION 2: Cards (dark) -->
 <section class="section-cards" id="section-cards">
   <p class="cards-label">pick the one that fits</p>
   <div class="cards-section" id="cards-section">
@@ -409,22 +397,18 @@
   <div class="inline-response" id="inline-response"></div>
 </section>
 
-<!-- SECTION 3: Outro (light) -->
 <section class="section-outro" id="section-outro">
   <div class="cta-block" id="cta-block"></div>
-
   <div class="email-block" id="email-block">
     <input type="email" class="email-input" id="email-input" placeholder="Your email" autocomplete="email" />
     <p class="email-disclaimer">We will only use your email to update you on our progress.<br><strong>No spam — ever. We mean it.</strong></p>
     <div class="email-hint" id="email-hint">Drop your email so we can reach you.</div>
     <button class="submit-btn" id="submit-btn" onclick="submitForm()"></button>
   </div>
-
   <div class="confirmation" id="confirmation">
     <p class="confirmation-line">You're on the list.</p>
     <p class="confirmation-sub">We'll be in touch when it's ready.</p>
   </div>
-
   <div class="logo-wrap">
     <img src="the_dental_fear_logo_2.png" alt="the dental fear" />
   </div>
@@ -464,7 +448,6 @@
     document.getElementById('section-cards').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  // Staggered card entrance on scroll into view
   window.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.card');
     const observer = new IntersectionObserver((entries) => {
@@ -487,7 +470,6 @@
     clearTimeout(responseTimer);
     clearTimeout(outroTimer);
 
-    // Reset
     const inlineEl = document.getElementById('inline-response');
     const outroEl = document.getElementById('section-outro');
     const ctaEl = document.getElementById('cta-block');
@@ -495,7 +477,6 @@
     inlineEl.classList.remove('visible');
     outroEl.classList.remove('visible');
 
-    // Hide unselected, highlight selected
     document.querySelectorAll('.card').forEach(c => {
       c.classList.remove('selected', 'hidden');
       if (c === el) {
@@ -510,7 +491,6 @@
     ctaEl.textContent = data.cta;
     document.getElementById('submit-btn').textContent = data.btn;
 
-    // Smooth staggered reveal
     responseTimer = setTimeout(() => {
       inlineEl.classList.add('visible');
     }, 600);
@@ -539,20 +519,18 @@
 
     emailHint.classList.remove('visible');
 
-    const payload = {
-      email: email,
-      card: selectedCard,
-      timestamp: new Date().toISOString()
-    };
-
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.6';
 
+    const form = new FormData();
+    form.append('email', email);
+    form.append('card', selectedCard);
+    form.append('timestamp', new Date().toISOString());
+
     fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: form
     })
     .then(res => res.json())
     .then(data => {
