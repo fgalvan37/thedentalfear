@@ -10,9 +10,7 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html {
-    scroll-behavior: smooth;
-  }
+  html { scroll-behavior: smooth; }
 
   body {
     min-height: 100%;
@@ -268,17 +266,9 @@
     -webkit-appearance: none;
   }
 
-  .email-input::placeholder {
-    color: #B0A898;
-  }
-
-  .email-input:focus {
-    border-color: #8A8078;
-  }
-
-  .email-input.highlight {
-    border-color: #4A3F35;
-  }
+  .email-input::placeholder { color: #B0A898; }
+  .email-input:focus { border-color: #8A8078; }
+  .email-input.highlight { border-color: #4A3F35; }
 
   .email-disclaimer {
     font-size: 13px;
@@ -305,9 +295,7 @@
     transition: opacity 300ms ease;
   }
 
-  .email-hint.visible {
-    opacity: 1;
-  }
+  .email-hint.visible { opacity: 1; }
 
   .submit-btn {
     width: 100%;
@@ -324,10 +312,9 @@
     transition: background 200ms ease;
   }
 
-  .submit-btn:hover {
-    background: #4A3F35;
-  }
+  .submit-btn:hover { background: #4A3F35; }
 
+  /* ── Confirmation (post submit) ── */
   .confirmation {
     max-width: 480px;
     width: 100%;
@@ -337,24 +324,25 @@
     display: none;
   }
 
-  .confirmation.visible {
-    opacity: 1;
-  }
+  .confirmation.visible { opacity: 1; }
 
   .confirmation-line {
-    font-weight: 300;
-    font-size: 20px;
-    color: #4A3F35;
-    margin-bottom: 8px;
+    font-weight: 400;
+    font-size: 22px;
+    color: #1A1A1A;
+    margin-bottom: 12px;
   }
 
   .confirmation-sub {
     font-weight: 300;
-    font-size: 14px;
-    color: #B0A898;
-    font-style: italic;
+    font-size: 15px;
+    color: #8A8078;
+    line-height: 1.7;
+    max-width: 400px;
+    margin: 0 auto;
   }
 
+  /* ── Logo ── */
   .logo-wrap {
     margin-top: 64px;
     text-align: center;
@@ -376,6 +364,7 @@
 </head>
 <body>
 
+<!-- SECTION 1: Intro (light) -->
 <section class="section-intro">
   <span class="header-dot">·</span>
   <h1 class="header-question">How's your relationship with your mouth?</h1>
@@ -386,6 +375,7 @@
   </button>
 </section>
 
+<!-- SECTION 2: Cards (dark) -->
 <section class="section-cards" id="section-cards">
   <p class="cards-label">pick the one that fits</p>
   <div class="cards-section" id="cards-section">
@@ -397,6 +387,7 @@
   <div class="inline-response" id="inline-response"></div>
 </section>
 
+<!-- SECTION 3: Outro (light) -->
 <section class="section-outro" id="section-outro">
   <div class="cta-block" id="cta-block"></div>
   <div class="email-block" id="email-block">
@@ -405,18 +396,18 @@
     <div class="email-hint" id="email-hint">Drop your email so we can reach you.</div>
     <button class="submit-btn" id="submit-btn" onclick="submitForm()"></button>
   </div>
+
   <div class="confirmation" id="confirmation">
-    <p class="confirmation-line">You're on the list.</p>
-    <p class="confirmation-sub">We'll be in touch when it's ready.</p>
+    <p class="confirmation-line">Almost there.</p>
+    <p class="confirmation-sub">We just need to make sure you're a real human — we sent you a quick confirmation email. Check your inbox (and maybe your spam, just in case) and click the link inside.</p>
   </div>
+
   <div class="logo-wrap">
     <img src="the_dental_fear_logo_2.png" alt="the dental fear" />
   </div>
 </section>
 
 <script>
-  
-
   const responses = {
     Card1: {
       response: "Good. You're ahead of most people.",
@@ -524,10 +515,10 @@
     submitBtn.style.opacity = '0.6';
 
     fetch('/api/subscribe', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ email, card: selectedCard })
-})
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, card: selectedCard })
+    })
     .then(res => res.json())
     .then(data => {
       if (data.result === 'success') {
