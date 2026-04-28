@@ -415,7 +415,7 @@
 </section>
 
 <script>
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_7F20qsXwndHh1QR5v4GkFj8pr8SJYKJYb9sfBzkGqFiDh_YSh0L-51rJ97qcJbJoQw/exec';
+  
 
   const responses = {
     Card1: {
@@ -523,15 +523,11 @@
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.6';
 
-    const form = new FormData();
-    form.append('email', email);
-    form.append('card', selectedCard);
-    form.append('timestamp', new Date().toISOString());
-
-    fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: form
-    })
+    fetch('/api/subscribe', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email, card: selectedCard })
+})
     .then(res => res.json())
     .then(data => {
       if (data.result === 'success') {
