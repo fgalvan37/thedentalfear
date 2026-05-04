@@ -535,6 +535,7 @@ src="https://www.facebook.com/tr?id=2025243265009316&ev=PageView&noscript=1"
     .then(res => res.json())
     .then(data => {
       if (data.result === 'success') {
+        fbq('track', 'Lead');
         showConfirmation();
       } else {
         showError();
