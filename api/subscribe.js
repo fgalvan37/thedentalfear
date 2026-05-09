@@ -11,10 +11,10 @@ export default async function handler(req, res) {
 
   const timestamp = new Date().toISOString();
 
-  // Save to Google Sheet as confirmed directly
+  // Save to Google Sheet as confirmed directly (empty token to keep column alignment)
   await fetch(process.env.APPS_SCRIPT_URL, {
     method: 'POST',
-    body: new URLSearchParams({ email, card, timestamp, status: 'confirmed' })
+    body: new URLSearchParams({ email, card, timestamp, token: '', status: 'confirmed' })
   });
 
   // Send welcome email via Resend
@@ -31,8 +31,8 @@ export default async function handler(req, res) {
       html: `
         <div style="font-family:'DM Sans',sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;background:#F5F2EE;color:#1A1A1A;">
           <p style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#8A8078;margin-bottom:24px;">the dental fear</p>
-          <p style="font-size:20px;font-weight:400;line-height:1.4;margin-bottom:16px;">You're on the list.</p>
-          <p style="font-size:16px;font-weight:300;color:#4A4540;line-height:1.7;margin-bottom:32px;">We're working on something that lets you take care of your mouth from home — without leaving yours. We'll reach out when it's ready.</p>
+          <p style="font-size:20px;font-weight:400;line-height:1.4;margin-bottom:16px;">You're on the list. Thank you!</p>
+          <p style="font-size:16px;font-weight:300;color:#4A4540;line-height:1.7;margin-bottom:32px;">We'll reach out when it's ready. Can't wait to tell you more.</p>
           <p style="font-size:12px;color:#B0A898;font-style:italic;">No spam — ever. We mean it.</p>
         </div>
       `
